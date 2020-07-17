@@ -1,0 +1,38 @@
+
+<p id="notice"><%= notice %></p>
+
+<div class="outer">
+  <h1>Subreddits</h1>
+
+  <%= button_to "New Subreddit", new_subreddit_path, :class => "btn btn-primary", :method => :get %>
+
+  <% if Subreddit.all.count == 0 %>
+    <h2>No subreddits found...add some today!</h2>
+  <% else %>
+    <div class="container" style="padding-top: 2%;">
+      <div class="card-group vgr-cards" >
+      
+        <% (@subreddits.sort_by{ |sub| sub.name.downcase }).each do |subreddit| %> 
+          <div class="card" style="align-items: center; border: none">
+            <div class="card-img-body" style="text-align: center;">
+              <img class="rounded-circle img-responsive" src="<%= url_for(subreddit.sub_img) %>">
+            </div>
+            <div class="card-body">
+              <h4 class="card-title"><%=subreddit.name.capitalize %></h4>
+              <p class="card-text"><%=h truncate(subreddit.description, :length => 250) %></p>
+              <%= button_to "Show", subreddit, :class => "btn btn-outline-info", :method => :get, form: {class: "button" } %>
+              <%= button_to "Images", subreddit_images_path(subreddit), :class => "btn btn-outline-info", :method => :get, form: {class: "button" } %>
+              <% if current_user.subreddits.include?(subreddit) %>
+                <%= button_to "Drop Subreddit", "/drop_subreddit/#{current_user.id}/#{subreddit.id}", :class => "btn btn-outline-warning", :method => :delete, form: {class: "button" } %>
+              <% else %>
+                <%= button_to "Add Subreddit", "/add_subreddit/#{current_user.id}/#{subreddit.id}", :class => "btn btn-outline-warning", :method => :post, form: {class: "button" } %>
+              <% end %>
+              <%= button_to "Destroy", subreddit, :class => "btn btn-outline-danger", :method => :delete, data: { confirm: 'Are you sure?'}, form: {class: "button" } if current_user.is_mod %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+

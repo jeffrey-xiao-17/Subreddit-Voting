@@ -1,0 +1,245 @@
+<%= csrf_meta_tags %>
+<p id="notice"><%= notice %></p>
+
+<link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<style>
+.comments-details button.btn.dropdown-toggle,
+.comments-details .total-comments {
+    font-size: 18px;
+    font-weight: 500;
+    color: #5e5e5e;
+}
+.comments-details {
+    padding: 15px 15px;
+}
+.comments .comments .dropdown,
+.comments .dropup {
+    position: relative;
+}
+.comments button {
+    background-color: transparent;
+    border: none;
+}
+.comments .comment-box {
+    width: 100%;
+    float: left;
+    height: 100%;
+    background-color: #FAFAFA;
+    padding: 10px 10px 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.comments .add-comment {
+    background-color: transparent;
+    border: none;
+    position: relative;
+    margin-bottom: 50px;
+}
+.comments .commenter-pic {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 100%;
+    border: 2px solid #fff;
+    overflow: hidden;
+    background-color: #fff;
+}
+.comments .add-comment .commenter-name {
+    width: 100%;
+    padding-left: 75px;
+    position: absolute;
+    top: 20px;
+    left: 0px;
+}
+.comments .add-comment input {
+    border-top: 0px;
+    border-bottom: 1px solid #ccc;
+    border-left: 0px;
+    border-right: 0px;
+    outline: 0px;
+    box-shadow: none;
+    border-radius: 0;
+    width: 100%;
+    padding: 0;
+    font-weight: normal;
+}
+.comments .add-comment input:focus {
+    border-color: #03a9f4;
+    border-width: 2px;
+}
+.comments .add-comment button[type=submit] {
+    background-color: #03a9f4;
+    color: #fff;
+    margin-right: 0px;
+}
+.comments .add-comment button {
+    background-color: #f5f5f5;
+    margin: 10px 5px;
+    font-size: 14px;
+    text-transform: uppercase;
+    float: right;
+}
+.comments .commenter-name .comment-time {
+    font-weight: normal;
+    margin-left: 8px;
+    font-size: 15px;
+}
+.comments p.comment-txt {
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+    padding: 0px 0px 15px;
+}
+.comments .commenter-name {
+    display: inline-block;
+    position: relative;
+    top: -20px;
+    left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.comments .comment-meta {
+    font-size: 14px;
+    color: #333;
+    padding: 2px 5px 0px;
+    line-height: 20px;
+    float: right;
+}
+.comments .reply-box {
+    display: none;
+}
+.comments .replied {
+    background-color: #fff;
+    width: 95%;
+    float: right;
+    margin-top: 15px;
+}
+
+/*======Responsive CSS=======*/
+@media (max-width: 767px){
+.comments .commenter-name {
+    font-size: 13px;
+    top: -5px;
+}
+.comments .commenter-pic {
+    width: 40px;
+    height: 40px;
+}
+.comments .commenter-name a{
+  display: block;
+}
+.comments .commenter-name .comment-time{
+  display: block;
+  margin-left: 0px;
+}
+}
+.cardImage {
+  height: auto;
+  width: auto
+}
+
+.a-primary, .a-primary:hover {
+  background-color: transparent;
+}
+</style>
+
+
+<div class="split left" style="position:absolute">
+  <div class="centered" style="height: 100%; width: 100%; display: flex; justify-content: center; align-items: center;">
+    <% if @image.picture_img.attached? %>
+      <% if @image.get_content_type == "video/mp4" %>
+        <video id="my-video" class="video-js" controls preload="auto" width="500" height="300" poster="<%= url_for(@image.thumbnail_img) %>" data-setup="{}" style="max-height: 80%;max-width: 100%;" autoplay loop muted>
+          <source src=<%= url_for(@image.picture_img) %> type="video/mp4"/>
+        </video>
+      <% else %>
+        <img class="card-img-top cardImage" src="<%= url_for(@image.picture_img) %>" style="max-height:80%">
+      <% end %>
+    <% else %>
+      <img class="card-img-top cardImage" src="<%= path_to_image("RedditAvatar.png") %>" style="max-height:80%">
+    <% end %>
+  </div>
+</div>
+
+<div class="split right" style="position:absolute">
+  <div class="centered">
+    <p>
+      <strong>Subreddit:</strong>
+      <%= @image.subreddit.name %>
+    </p>
+
+    <p>
+      <strong>Caption:</strong>
+      <%= @image.caption %>
+    </p>
+
+    <p>
+      <strong>Upvotes:</strong>
+      <%= @image.upvotes %>
+    </p>
+
+    <%= button_to "Edit", edit_subreddit_image_path(@image.subreddit, @image), :class => "btn btn-link", :method => :get, form: { class: "button" } if current_user.is_mod %>
+    <%= "|" if current_user.is_mod %>
+    <%= button_to "Back", subreddit_images_path(@image.subreddit), :class => "btn btn-link", :method => :get, form: { class: "button" }%>
+  </div>
+</div>
+
+<body>
+<div class="container" style="padding-top: 650px">
+  <h2>Comments</h2>
+  <div class="row">
+    <div class="col-12">
+      <div class="comments">
+        <div class="comments-details">
+          <span class="total-comments comments-sort"><%= @image.comments.count %> Comments</span>   
+        </div>
+  
+        <%= render partial: 'comments/form'%>
+
+        <% @image.comments.each do |comment| %>
+          <% next if comment.user == nil %>
+          <div class="comment-box">
+            <span class="commenter-pic">
+              <img src="<%= url_for(comment.user.avatar_img)%>" class="img-fluid">
+            </span>
+            <span class="commenter-name">
+              <%= link_to comment.user.full_name, "/users/#{comment.user.id}", :method => :get, class: "a-primary" %><span class="comment-time"><%= comment.created_at.strftime("%x, %I:%M%p %Z")  %></span>
+            </span>       
+            <p class="comment-txt more"><%= comment.caption %></p>
+            <div class="comment-meta">
+              <%= link_to "/subreddits/#{comment.image.subreddit.id}/images/#{comment.image.id}/comments/#{comment.id}/upvote", :method => :post, class: "a-primary" do %>  
+                <% if current_user.liked_comments.include? comment.id %>
+                  <i class="fa fa-thumbs-o-up text-primary" aria-hidden="true"></i>
+                <% else %>
+                  <i class="fa fa-thumbs-o-up text-muted" aria-hidden="true"></i>
+                <% end %>
+              <% end %>
+                <%= "   #{comment.upvotes}   " %>
+              <%= link_to "/subreddits/#{comment.image.subreddit.id}/images/#{comment.image.id}/comments/#{comment.id}/downvote", :method => :post, class: "a-primary" do %>  
+                <% if current_user.disliked_comments.include? comment.id %>
+                  <i class="fa fa-thumbs-o-down text-primary" aria-hidden="true"></i>
+                <% else %>
+                  <i class="fa fa-thumbs-o-down text-muted" aria-hidden="true"></i>
+                <% end %>
+              <% end %>
+            </div>
+            <% if comment.user == current_user %>
+              <div class="comment-meta" style="float: left">
+                <div>
+                  <%= link_to 'Delete', subreddit_image_comment_path(comment.image.subreddit, comment.image, comment), method: :delete, data: { confirm: 'Are you sure?' }, class: "a-primary" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</body>

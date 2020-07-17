@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @comment.image_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @comment.user_id %>
+</p>
+
+<p>
+  <strong>Caption:</strong>
+  <%= @comment.caption %>
+</p>
+
+<p>
+  <strong>Upvotes:</strong>
+  <%= @comment.upvotes %>
+</p>
+
+<%= link_to 'Edit', edit_subreddit_image_comment_path(@comment.image.subreddit, @comment.image, @comment) %> |
+<%= link_to 'Back', subreddit_image_comments_path(@comment.image.subreddit, @comment.image) %>

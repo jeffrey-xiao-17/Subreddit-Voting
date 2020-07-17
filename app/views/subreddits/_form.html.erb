@@ -1,0 +1,24 @@
+<%= form_with(model: subreddit, local: true) do |form| %>
+  <% if subreddit.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(subreddit.errors.count, "error") %> prohibited this subreddit from being saved:</h2>
+
+      <ul>
+        <% subreddit.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group" >
+    <label><%= form.label :name %></label>
+    <%= form.text_field :name, :class=>'form-control' %>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="btn btn-success">Submit</button>
+  </div>
+
+  <p><i>Please be patient - this step may take some time.</i></p>
+<% end %>

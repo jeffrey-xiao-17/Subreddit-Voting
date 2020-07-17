@@ -1,0 +1,7 @@
+<div class="outer">
+<h1>Editing Comment</h1>
+
+<%= render 'form', comment: @comment %>
+
+<%= button_to "Back", subreddit_image_path(@comment.image.subreddit.id, @comment.image.id), :class => "btn btn-link", :method => :get, form: { class: "button" }%>
+</div>

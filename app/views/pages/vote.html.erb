@@ -1,0 +1,122 @@
+
+<p id="notice"><%= notice %></p>
+
+<div class="outer">
+
+<h1>Cast your votes!</h1>
+
+<% if !current_user.subreddits.any? %>
+  <h2>  No subreddits found...add some in the "Subreddits" tab!  </h2>
+<% else %>
+
+  <% url = request.original_url %>
+  <% sub_id = -1 %>
+  <% if url.chars.last(5).join == "vote?" || url.chars.last(4).join == "vote" %>
+    <% selected_subs = current_user.subreddits.shuffle() %>
+    <% show_vote = true %>
+  <% else %>
+    <% uri = URI.parse(url) %>
+    <% params = CGI.parse(uri.query) %>
+    <% sub_id = params['sub'].first.to_i %>
+    <% curr_sub = Subreddit.find(sub_id) %>
+    <% selected_subs = [curr_sub] %>
+    <% show_vote = true %>
+  <% end %>
+
+  <div class="voteHeading" style="display: inline-block;" id="content">
+    <div style="display: inline-block;">
+      <% if sub_id == -1 %>
+        <%= button_to "Refresh", action="/vote?", :class => "btn btn-outline-primary", :method => :get %>
+      <% else %>
+        <%= button_to "Refresh", action="/vote?sub=#{sub_id}", :class => "btn btn-outline-primary", :method => :get, params: { :sub => sub_id } %>
+      <% end %>
+    </div>
+    <select id="subredditPicked" class="selectpicker" data-live-search="true" onchange="location = this.value;"> 
+        <% if sub_id == -1 %>
+          <option selected="selected" value="/vote" href="/vote">All</option>
+        <% else %>
+          <option value="/vote" href="/vote">All</option>
+        <% end %>
+        <% current_user.subreddits.each do |subreddit| %>
+          <% if subreddit.id == sub_id%>
+            <option selected="selected" value="/vote?sub=<%= subreddit.id %>" href="/vote?sub=<%= subreddit.id %>"><%= subreddit.name%></option>
+          <% else %>
+            <option value="/vote?sub=<%= subreddit.id %>" href="/vote?sub=<%= subreddit.id %>"><%= subreddit.name%></option>
+          <% end %>
+        <% end %>
+        <% if curr_sub != nil && !(current_user.subreddits.include? curr_sub) %>
+          <option selected="selected"><%= "#{curr_sub.name} - Not Added" %></option>
+        <% end %>
+      </select>
+  </div>
+
+  <% if curr_sub != nil && !(current_user.subreddits.include? curr_sub) %>
+    <h2>You have not added "<%= curr_sub.name %>"</h2>
+    <% show_vote = false %>
+  <% end %>
+  <% if show_vote %>
+    <% twoPics = selected_subs[0].images.sample(2) %>
+
+    <div class="voteBody" style="padding-top: 3%">
+      <div class="splitVote left">
+        <div class="imgbox centered" style="position: absolute; width: 100%">
+          <figure>
+            <% if twoPics[0].picture_img.attached? %>
+              <% if twoPics[0].get_content_type == "video/mp4" %>
+                <video id="my-video" class="video-js" controls preload="auto" width="500" height="300" poster="<%= url_for(twoPics[0].thumbnail_img) %>" data-setup="{}" style="max-height: 475px" autoplay loop muted>
+                  <source src=<%= url_for(twoPics[0].picture_img) %> type="video/mp4" style="max-height: 475px"/>
+                </video>
+              <% else %>
+                <img class="center-fit" src="<%= url_for(twoPics[0].picture_img)%>" style="max-height: 475px"/>
+              <% end %>
+            <% else %>
+              <img class="card-img-top userImage" src="<%= path_to_image("RedditAvatar.png") %>" style="max-height: 475px">
+            <% end %>
+
+            <figcaption>
+              <%= twoPics[0].caption %>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="container-fluid splitVote right">
+        <div class="imgbox centered" style="position: absolute; object-fit: contain; width: 100%" >
+
+          <figure>
+            <% if twoPics[1].picture_img.attached? %>
+              <% if twoPics[1].get_content_type == "video/mp4" %>
+                <video id="my-video" class="video-js" controls preload="auto" width="500" height="300" poster="<%= url_for(twoPics[1].thumbnail_img) %>" data-setup="{}" style="max-height: 475px" autoplay loop muted>
+                  <source src=<%= url_for(twoPics[1].picture_img) %> type="video/mp4" style="max-height: 475px"/>
+                </video>
+              <% else %>
+                <img class="center-fit" src="<%= url_for(twoPics[1].picture_img)%>" style="max-height: 475px"/>
+              <% end %>
+            <% else %>
+              <img class="card-img-top userImage" src="<%= path_to_image("RedditAvatar.png") %>" style="max-height: 475px">
+            <% end %>
+
+            <figcaption>
+              <%= twoPics[1].caption %>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center align-middle img" style="text-align: center; position: relative" id="voteBtns">
+      <%= button_to "Vote Left", "/cast_vote/#{twoPics[0].subreddit.id}/#{twoPics[0].id}", :class => "btn btn-outline-primary btn-lg", :method => :post, params: {:controller => "pages", :sub => (selected_subs.length > 1 ? "all" : "#{selected_subs[0].id}")}%>
+      <%= button_to "Vote Right", "/cast_vote/#{twoPics[1].subreddit.id}/#{twoPics[1].id}", :class => "btn btn-outline-secondary btn-lg", :method => :post, params: {:controller => "pages", :sub => (selected_subs.length > 1 ? "all" : "#{selected_subs[0].id}")} %>
+    </div>
+  <% end %>
+<% end %>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>

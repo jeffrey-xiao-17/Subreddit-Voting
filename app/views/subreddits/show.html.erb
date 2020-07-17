@@ -1,0 +1,78 @@
+
+<p id="notice"><%= notice %></p>
+
+<div class="outer">
+<div class="splitUser left">
+  <div class="centered">
+    <p>
+      <img src="<%= url_for(@subreddit.sub_img)%>"/>
+    </p>
+  </div>
+</div>
+
+
+<div class="splitUser right">
+  <div class="centered">
+    <p>
+      <strong>Name:</strong>
+      <%= @subreddit.name.capitalize %>
+    </p>
+
+    <p>
+      <strong>Description:</strong>
+      <%= @subreddit.description %>
+    </p>
+
+    <p>
+      <strong>Total Upvotes:</strong>
+      <%= @subreddit.total_upvotes %>
+    </p>
+
+    <% if current_user.subreddits.include?(@subreddit) %>
+      <%= button_to "Drop Subreddit", "/drop_subreddit/#{current_user.id}/#{@subreddit.id}", :class => "btn btn-outline-warning", :method => :delete, form: {class: "button" } %>
+    <% else %>
+      <%= button_to "Add Subreddit", "/add_subreddit/#{current_user.id}/#{@subreddit.id}", :class => "btn btn-outline-warning", :method => :post, form: {class: "button" } %>
+    <% end %>
+    <div style="inline" id="buttonHolder">
+      <% if current_user.is_mod %>
+        <%= button_to "Edit", edit_subreddit_path(@subreddit), :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%> | 
+      <% end %>
+      <%= button_to "Images", subreddit_images_path(@subreddit), :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%> | 
+      <%= button_to "Back", subreddits_path, :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="second">
+<h2>Members</h2>
+<div class="card-columns" style="text-align: center">
+  <% @subreddit.users.each do |user| %>
+    <div class="card" style="width: 312px;">
+      <% if user.avatar_img.attached? %>
+        <img class="card-img-top userImage" src="<%= url_for(user.avatar_img) %>" alt="Avatar">
+      <% else %>
+        <img class="card-img-top userImage" src="<%= path_to_image("RedditAvatar.png") %>" >
+      <% end %>
+      
+      <div class="card-body">
+        <h5 class="card-title"><%= "#{user.first_name.capitalize} #{user.last_name.capitalize}" %></h5>
+        <p class="card-text"><%= "#{user.username}" %></p>
+        <%= button_to "Show", user, :class => "btn btn-outline-info", :method => :get, form: {class: "button" } %>
+        <% if user == current_user %>
+          <%= button_to "Edit", edit_user_path(user), :class => "btn btn-outline-info button", :method => :get, form: {class: "button" } %>
+          <%= button_to "Destroy", user, :class => "btn btn-outline-danger button", :method => :delete, form: {class: "button" } , data: { confirm: 'Are you sure?'}%>
+        <% else %>
+          <% if user.followers.include? current_user %>
+            <%= button_to "Unfollow", "/delete_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :delete, form: {class: "button" } %>
+          <% else %>
+            <%= button_to "Follow", "/add_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :post, form: {class: "button" } %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+</div>
+</div>

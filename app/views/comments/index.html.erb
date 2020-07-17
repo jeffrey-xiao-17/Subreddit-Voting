@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Comments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>User</th>
+      <th>Caption</th>
+      <th>Upvotes</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @comments.each do |comment| %>
+      <tr>
+        <td><%= comment.image_id %></td>
+        <td><%= comment.user_id %></td>
+        <td><%= comment.caption %></td>
+        <td><%= comment.upvotes %></td>
+        <td><%= link_to 'Show', subreddit_image_comment_path(comment.image.subreddit, comment.image, comment) %></td>
+        <td><%= link_to 'Edit', edit_subreddit_image_comment_path(comment.image.subreddit, comment.image, comment) %></td>
+        <td><%= link_to 'Destroy', subreddit_image_comment_path(comment.image.subreddit, comment.image, comment), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Comment', new_subreddit_image_comment_path %>

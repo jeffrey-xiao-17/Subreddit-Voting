@@ -1,0 +1,14 @@
+
+<script>
+  $("#submitBtn").on("click", function() {
+    $(this).prop("disabled", true);
+});
+</script>
+
+<div class="outer">
+<h1>New Subreddit</h1>
+
+<%= render 'form', subreddit: @subreddit %>
+
+<%= button_to "Back", subreddits_path, :class => "btn btn-link", :method => :get, form: {id: "submitBtn", class: "button" }%>
+</div>

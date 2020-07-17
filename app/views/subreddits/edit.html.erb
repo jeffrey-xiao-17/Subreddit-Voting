@@ -1,0 +1,9 @@
+
+<div class="outer">
+  <h1>Editing Subreddit</h1>
+
+  <%= render 'form', subreddit: @subreddit %>
+
+  <%= button_to "Show", @subreddit, :class => "btn btn-link", :method => :get, form: {class: "button" } %> | 
+  <%= button_to "Back", subreddits_path, :class => "btn btn-link", :method => :get, form: {class: "button" } %>
+</div>

@@ -1,0 +1,7 @@
+<div class="outer">
+<h1>New Image</h1>
+
+<%= render 'form', image: @image %>
+
+<%= button_to "Back", subreddit_images_path(@image.subreddit), :class => "btn btn-link", :method => :get, form: { class: "button" }%>
+</div>

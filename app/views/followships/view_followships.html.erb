@@ -1,0 +1,84 @@
+<p id="notice"><%= notice %></p>
+<div class="outer">
+  <h1>Followships for <%= @user.full_name %></h1>
+
+  <%= button_to "Back", @user, :class => "btn btn-light", :method => :get %>
+  <br>
+  <h2>Followers</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col">Username</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <% User.all.each do |user| %>
+          <% next unless @user.followers.include? user %>
+          <tr>
+              <td scope="row" align="center" style="vertical-align : middle;"><img class="card-img-top userImage" src="<%= url_for(user.avatar_img) %>" alt="Avatar" style="text-align: center;width: 50px;height: 50px;display: inline-block;border-radius: 100%;border: 2px solid #fff;overflow: hidden;"></td>
+              <td style="vertical-align : middle;"><%= "#{user.first_name.capitalize} #{user.last_name.capitalize}" %></td>
+              <td style="vertical-align : middle;"><%= "#{user.username}" %></td>
+              <td style="vertical-align : middle;">
+                <div style="inline" id="buttonHolder">
+                  <%= button_to "Show", user, :class => "btn btn-outline-info button", :method => :get, form: {class: "button" } %>
+                  <% if user == current_user %>
+                    <%= button_to "Edit", edit_user_path(user), :class => "btn btn-outline-info button", :method => :get, form: {class: "button" } %>
+                    <%= button_to "Destroy", user, :class => "btn btn-outline-danger button", :method => :delete, form: {class: "button" } , data: { confirm: 'Are you sure?'}%>
+                  <% else %>
+                    <% if user.followers.include? current_user %>
+                      <%= button_to "Unfollow", "/delete_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :delete, form: {class: "button" } %>
+                    <% else %>
+                      <%= button_to "Follow", "/add_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :post, form: {class: "button" } %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
+
+  <h2>Following</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col">Username</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <% User.all.each do |user| %>
+          <% next unless @user.followings.include? user %>
+          <tr>
+              <td scope="row" align="center" style="vertical-align : middle;"><img class="card-img-top userImage" src="<%= url_for(user.avatar_img) %>" alt="Avatar" style="text-align: center;width: 50px;height: 50px;display: inline-block;border-radius: 100%;border: 2px solid #fff;overflow: hidden;"></td>
+              <td style="vertical-align : middle;"><%= "#{user.first_name.capitalize} #{user.last_name.capitalize}" %></td>
+              <td style="vertical-align : middle;"><%= "#{user.username}" %></td>
+              <td style="vertical-align : middle;">
+                <div style="inline" id="buttonHolder">
+                  <%= button_to "Show", user, :class => "btn btn-outline-info button", :method => :get, form: {class: "button" } %>
+                  <% if user == current_user %>
+                    <%= button_to "Edit", edit_user_path(user), :class => "btn btn-outline-info button", :method => :get, form: {class: "button" } %>
+                    <%= button_to "Destroy", user, :class => "btn btn-outline-danger button", :method => :delete, form: {class: "button" } , data: { confirm: 'Are you sure?'}%>
+                  <% else %>
+                    <% if user.followers.include? current_user %>
+                      <%= button_to "Unfollow", "/delete_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :delete, form: {class: "button" } %>
+                    <% else %>
+                      <%= button_to "Follow", "/add_follow/#{user.id}/#{current_user.id}", :class => "btn btn-outline-warning button", :method => :post, form: {class: "button" } %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>

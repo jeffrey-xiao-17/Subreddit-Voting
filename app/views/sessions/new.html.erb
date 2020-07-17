@@ -1,0 +1,23 @@
+
+<div class="outer">
+<h1> Log In </h1>
+
+<% if @message %>
+<div class="alert alert-danger" role="alert">
+  <%=@message %>
+</div>
+<% end %>
+
+<%= form_with(url: '/login', local: true) do |form| %>
+  <div class="form-group">
+    <label><%= form.label :username %></label>
+    <%= form.text_field :username, :class=>'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <label><%= form.label :password %></label>
+    <%= form.password_field :password_hash, :class=>'form-control' %>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+<%end%>
+</div>

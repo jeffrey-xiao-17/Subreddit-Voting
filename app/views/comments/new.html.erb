@@ -1,0 +1,7 @@
+<div class="outer">
+<h1>New Comment</h1>
+
+<%= render 'form', comment: @comment %>
+
+<%= link_to 'Back', subreddit_image_comments_path(@comment.image.subreddit, @comment.image) %>
+</div>

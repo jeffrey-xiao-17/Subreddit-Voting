@@ -1,0 +1,44 @@
+
+<p id="notice"><%= notice %></p>
+
+<link href="https://vjs.zencdn.net/7.7.5/video-js.css" rel="stylesheet" />
+
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+
+<div class="outer">
+<h1>Images</h1>
+
+<%= button_to "Back", Subreddit.find(params[:subreddit_id]), :class => "btn btn-light", :method => :get %> <br>
+
+<div class="card-columns" style="text-align: center">
+<% Subreddit.find(params[:subreddit_id]).images.each do |image| %>
+    <div class="card" style="width: 312px;">
+      <% if image.picture_img.attached? %>
+        <% if image.get_content_type == "video/mp4" %>
+          <video id="my-video" class="video-js" controls preload="auto" width="312" height="200" poster="<%= url_for(image.thumbnail_img) %>" data-setup="{}" autoplay loop muted>
+            <source src=<%= url_for(image.picture_img) %> type="video/mp4" />
+          </video>
+        <% else %>
+          <img class="card-img-top userImage" src="<%= url_for(image.picture_img) %>" >
+        <% end %>
+      <% else %>
+        <img class="card-img-top userImage" src="<%= path_to_image("RedditAvatar.png") %>" >
+      <% end %>
+      
+      <div class="card-body">
+        <h5 class="card-title"><%= "#{image.caption.capitalize}" %></h5>
+        <p class="card-text"><%= "Upvotes: #{image.upvotes}" %></p>
+        <p class="card-text"><%= button_to "Show", subreddit_image_path(image.subreddit, image), :class => "btn btn-outline-info", :method => :get, form: {class: "button" } %>
+        <% if current_user.is_mod %>
+          <%= button_to "Edit", edit_subreddit_image_path(image.subreddit, image), :class => "btn btn-outline-info", :method => :get, form: {class: "button" } %>
+          <%= button_to "Destroy", subreddit_image_path(image.subreddit, image), :class => "btn btn-outline-danger", :method => :delete, data: { confirm: 'Are you sure?' }, form: {class: "button" } %>
+        <% end %>
+        </p>
+      </div>
+    </div>
+<% end %>
+</div>
+</div>
+
+
+<script src="https://vjs.zencdn.net/7.7.5/video.js"></script>

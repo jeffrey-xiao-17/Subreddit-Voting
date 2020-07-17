@@ -1,0 +1,27 @@
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+  <div class="container">
+    <%= button_to "Subreddit Voting", root_path, :class => "navbar-brand btn btn-link", :method => :get, form: {class: "button" }%>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+          <!-- Should only be seen if logged in-->
+          <% if logged_in? %>
+            <%= button_to "Users", "/users", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+            <%= button_to "Subreddits", "/subreddits", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+            <%= button_to "Vote", "/vote", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+            <%= button_to "Statistics", "/statistics", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+            <%= button_to "Log Out", "/login", :class => "nav-link btn btn-link", :method => :delete, form: {class: "button" }%>
+          <!-- Should only be seen if NOT logged in -->
+          <% else %>
+            <%= button_to "Sign Up", "/users/new", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+            <%= button_to "Log In", "/login", :class => "nav-link btn btn-link", :method => :get, form: {class: "button" }%>
+          <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,291 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ 
+
+ $theme-colors: (
+  "primary": #007bff,
+  "secondary": #0056b3
+);
+
+
+@import url('https://fonts.googleapis.com/css?family=Gentium+Basic&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+@import "bootstrap";
+@import "font-awesome";
+
+/* 
+ * Custom Styles
+ */
+
+.navbar-brand {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.nav-item {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-size: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #01256e;
+  font-weight: 500;
+  line-height: 1.25;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h2 {
+  text-align: center;
+  font-size: 25px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #01256e;
+  font-weight: 300;
+  line-height: 1.25;
+  margin: 2em 0 .67em;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h3 {
+  font-size: 16px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  color: #01256e;
+  font-weight: 300;
+  line-height: 1.25;
+  font-family: 'Open Sans', sans-serif;
+}
+
+p {
+  font-size: 18px;
+  color: #44464b;
+  font-family: "Open Sans",sans-serif;
+  line-height: 1.5;
+  font-weight: 100;
+  text-rendering: optimizeLegibility;
+}
+
+li {
+  line-height: 1.5;
+  font-family: "Open Sans",sans-serif;
+}
+
+footer {
+  margin: 0px;
+  text-align: center;
+  color: #cfd0d2;
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 0;
+  top: 56px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-top: 0px;
+}
+
+.splitUser {
+  height: 400px;
+  width: 50%;
+  position: absolute;
+  z-index: 0;
+  overflow-x: hidden;
+  padding-top: 0px;
+  overflow-y: hidden;
+}
+
+.splitVote {
+  height: 500px;
+  width: 50%;
+  position: absolute;
+  z-index: 0;
+  overflow-x: hidden;
+  padding-top: 0px;
+  overflow-y: hidden;
+  object-fit: cover;
+}
+
+.splitGraph {
+  width: 50%;
+  position: absolute;
+  z-index: 0;
+  overflow-x: hidden;
+  padding-top: 0px;
+  overflow-y: hidden;
+  object-fit: cover;
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.centered img {
+  max-width: 80%;
+  border-radius: 10%;
+}
+
+.centeredImageShow img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 250px;
+  border-radius: 5%;
+}
+
+.second {
+  position: relative;
+  top: 410px;
+}
+
+
+.card.colorful-card .testimonial-card .card-up {
+  height: 75px;
+}
+.card.colorful-card .testimonial-card .avatar {
+  border: 3px solid #fff !important;
+}
+
+.userImage {
+  height: 200px;
+  width: 312px;
+  object-fit: cover;
+}
+
+.voteHeading{
+  position: relative;
+}
+
+.voteBody{
+  position: relative;
+}
+
+
+.outer {
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+figure {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#buttonHolder {
+  width: 100%;
+}
+
+.button {
+  display: inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+// Bootstrap resets
+
+.card-img {
+  border-radius: 0;
+}
+
+.vgr-cards {
+  .card {
+    display: flex;
+    flex-flow: wrap;
+    flex: 100%;
+    margin-bottom: 40px;
+
+    &:nth-child(even) .card-img-body {
+      order: 2;
+    }
+
+    &:nth-child(even) .card-body {
+      padding-left: 0;
+      padding-right: 1.25rem; 
+    }
+    
+    @media (max-width: 576px) {
+      display: block;
+    }
+    
+  }
+
+  .card-img-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    
+    @media (max-width: 576px) {
+      width: 100%;
+      height: 200px;
+          margin-bottom: 20px;
+    }
+    
+  }
+  
+  .card-img {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    
+    @media (max-width: 1140px) {
+          margin: 0;
+    transform: none;
+    width: 100%;
+    height: auto;
+    }
+    
+  }
+
+  .card-body {
+    flex: 2;
+    padding: 0 0 0 1.25rem;
+    
+    @media (max-width: 576px) {
+      padding: 0;
+    }
+    
+  }
+}
